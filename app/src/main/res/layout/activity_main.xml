@@ -75,21 +75,6 @@
         app:layout_constraintTop_toBottomOf="@+id/host4" />
 
     <Button
-        android:id="@+id/insertUrl"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginEnd="48dp"
-        android:layout_marginRight="48dp"
-        android:background="#7E3F51B5"
-        android:text="Type URL..."
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button8"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/host5" />
-
-    <Button
         android:id="@+id/host4"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -107,18 +92,34 @@
         app:layout_constraintTop_toBottomOf="@+id/host3" />
 
     <Button
-        android:id="@+id/button8"
+        android:id="@+id/connectButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="6dp"
-        android:layout_marginLeft="6dp"
         android:layout_marginEnd="24dp"
         android:layout_marginRight="24dp"
         android:background="#834CAF50"
         android:text="Connect"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/insertUrl"
+        app:layout_constraintTop_toBottomOf="@+id/host5" />
+
+    <EditText
+        android:id="@+id/insertUrl"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginLeft="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginRight="24dp"
+        android:background="#853F51B5"
+        android:ems="10"
+        android:hint="Type URL.."
+        android:inputType="textPersonName"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body1"
+        android:textStyle="italic"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/connectButton"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/host5" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
