@@ -9,11 +9,15 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-    }
-
-    fun connect(view: View): Unit {
         connectButton.setOnClickListener() {
+            webView.loadUrl("https://" + insertUrl.text.toString())
+            //  connect()
+        }
 
+        fun connect(view: View): Unit {
+            connectButton.setOnClickListener() {
+                webView.loadUrl("https://" + insertUrl.text.toString())
+            }
         }
     }
 }
