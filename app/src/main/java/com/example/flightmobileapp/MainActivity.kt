@@ -22,12 +22,11 @@ class MainActivity : AppCompatActivity() {
 
         connectButton.setOnClickListener {
 
-
             val gson = GsonBuilder()
                 .setLenient()
                 .create()
             val retrofit = Retrofit.Builder()
-                .baseUrl("http://10.0.2.2:44383/")
+                .baseUrl(insertUrl.text.toString())
                 .addConverterFactory(GsonConverterFactory.create(gson)).build()
             val api = retrofit.create(Api::class.java)
             val body = api.getImg().enqueue(object : Callback<ResponseBody> {
