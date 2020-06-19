@@ -23,8 +23,7 @@ class MainActivity : AppCompatActivity() {
         connectButton.setOnClickListener {
 
             val gson = GsonBuilder()
-                .setLenient()
-                .create()
+                .setLenient().create()
             val retrofit = Retrofit.Builder()
                 .baseUrl(insertUrl.text.toString())
                 .addConverterFactory(GsonConverterFactory.create(gson)).build()
