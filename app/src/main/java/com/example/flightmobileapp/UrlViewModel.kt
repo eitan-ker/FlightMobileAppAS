@@ -1,7 +1,9 @@
 package com.example.flightmobileapp
 
+import android.app.usage.UsageEvents
 import androidx.databinding.Bindable
 import androidx.databinding.Observable
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -25,20 +27,32 @@ class UrlViewModel(private val repository: UrlRepo) : ViewModel(), Observable {
     @Bindable
     val clearAllOrDeleteButtonText = MutableLiveData<String>()
 
+    private val statusMessage = MutableLiveData<Event<String>>()
+
+    val message : LiveData<Event<String>>
+        get() = statusMessage
+
     init {
         saveOrUpdateButtonText.value = "Connect"
         clearAllOrDeleteButtonText.value = "Clear All"
     }
 
     fun saveOrUpdate() {
-        if (isUpdateOrDelete) {
-            urlToUpdateOrDelete.url = inputUrl.value!!
-            update(urlToUpdateOrDelete)
+
+        if (inputUrl.value == null) {
+            statusMessage.value = Event("Please enter Url")
         } else {
-            val  url = inputUrl.value!!
-            insert(Url(0, url))
-            inputUrl.value = null
+            if (isUpdateOrDelete) {
+                urlToUpdateOrDelete.url = inputUrl.value!!
+                update(urlToUpdateOrDelete)
+            } else {
+                val  url = inputUrl.value!!
+                insert(Url(0, url))
+                inputUrl.value = null
+            }
         }
+
+
 
     }
 
@@ -52,15 +66,16 @@ class UrlViewModel(private val repository: UrlRepo) : ViewModel(), Observable {
     }
 
     fun insert(url: Url): Job = viewModelScope.launch {
-        repository.insert(url)
+        if (inputUrl.value != null) {
+            repository.insert(url)
+        }
     }
 
-    fun update(url: Url): Job = viewModelScope.launch {
-        repository.update(url)
-        inputUrl.value = null
-        isUpdateOrDelete = false
-        clearAllOrDeleteButtonText.value = "Clear All"
-
+         fun update(url: Url): Job = viewModelScope.launch {
+            repository.update(url)
+            inputUrl.value = null
+            isUpdateOrDelete = false
+            clearAllOrDeleteButtonText.value = "Clear All"
     }
 
     fun delete(url: Url): Job = viewModelScope.launch {
@@ -76,7 +91,7 @@ class UrlViewModel(private val repository: UrlRepo) : ViewModel(), Observable {
 
     fun initUpdateAndDelete(url : Url) {
         inputUrl.value = url.url
-        isUpdateOrDelete = true
+        isUpdateOrDelete = true // clicked event
         urlToUpdateOrDelete = url
         clearAllOrDeleteButtonText.value = "Delete"
     }

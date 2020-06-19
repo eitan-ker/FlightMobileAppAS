@@ -8,9 +8,10 @@ import com.example.flightmobileapp.databinding.ListItemBinding
 import com.example.flightmobileapp.db.Url
 import com.example.flightmobileapp.generated.callback.OnClickListener
 
-class MyRecyclerViewAdapter(private val urlList : List<Url>,
-                            private val clickListener :(Url) ->
+class MyRecyclerViewAdapter(private val clickListener :(Url) ->
                             Unit):RecyclerView.Adapter<MyViewHolder>(){
+
+    private val urlList = ArrayList<Url>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         val layoutInflator = LayoutInflater.from(parent.context)
@@ -25,6 +26,11 @@ class MyRecyclerViewAdapter(private val urlList : List<Url>,
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         holder.bind(urlList[position], clickListener)
+    }
+
+    fun setList(urls : List<Url>) {
+        urlList.clear()
+        urlList.addAll(urls)
     }
 
 }

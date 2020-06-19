@@ -28,8 +28,11 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
+
     private lateinit var binding : ActivityMainBinding
     private lateinit var urlViewModel : UrlViewModel
+    private lateinit var adapter : MyRecyclerViewAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
        // setContentView(R.layout.activity_main)
@@ -75,14 +78,18 @@ class MainActivity : AppCompatActivity() {
 
     private fun initRecycleView() {
         binding.urlsRecyclerView.layoutManager = LinearLayoutManager(this)
+        adapter = MyRecyclerViewAdapter({selectedItem : Url->listItemClicked(selectedItem)})
+        binding.urlsRecyclerView.adapter = adapter
         displayUrlsList()
+
+
     }
 
     private fun displayUrlsList() {
         urlViewModel.urls.observe(this, Observer {
             Log.i("MYTAG", it.toString())
-            binding.urlsRecyclerView.adapter = MyRecyclerViewAdapter(it,
-                {selectedItem : Url->listItemClicked(selectedItem)})
+            adapter.setList(it)
+            adapter.notifyDataSetChanged()
         })
     }
 
