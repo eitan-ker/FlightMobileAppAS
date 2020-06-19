@@ -16,7 +16,6 @@
         android:clickable="false"
         android:cropToPadding="false"
         android:keepScreenOn="true"
-        android:src=""
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
