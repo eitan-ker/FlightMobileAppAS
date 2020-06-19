@@ -2,8 +2,20 @@ package com.example.flightmobileapp
 
 import Api
 import android.content.Intent
+import android.os.Binder
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
+import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.example.flightmobileapp.databinding.ActivityMainBinding
+import com.example.flightmobileapp.db.Url
+import com.example.flightmobileapp.db.UrlDataBase
+import com.example.flightmobileapp.db.UrlRepo
 
 
 import com.google.gson.GsonBuilder
@@ -16,11 +28,23 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class MainActivity : AppCompatActivity() {
+    private lateinit var binding : ActivityMainBinding
+    private lateinit var urlViewModel : UrlViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+       // setContentView(R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        val dao = UrlDataBase.getInstance(application).urlDAO
+        val repository = UrlRepo(dao)
+        val factory = UrlViewModelFactory(repository)
+        urlViewModel = ViewModelProvider(this, factory).get(UrlViewModel::class.java)
+        binding.myViewModel = urlViewModel
+        binding.lifecycleOwner = this
+        initRecycleView()
 
-        connectButton.setOnClickListener {
+
+
+        /*connectButton.setOnClickListener {
 
             val gson = GsonBuilder()
                 .setLenient().create()
@@ -35,19 +59,36 @@ class MainActivity : AppCompatActivity() {
                 ) {
                     //    success
                     if (response.isSuccessful) {
+
+
+
                         val intent = Intent(this@MainActivity, AppActivity::class.java)
                         startActivity(intent)
-
                     }
-                }
-
+                    }
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
                     //    failure
                 }
             })
-        }
+        }*/
     }
 
+    private fun initRecycleView() {
+        binding.urlsRecyclerView.layoutManager = LinearLayoutManager(this)
+        displayUrlsList()
+    }
 
+    private fun displayUrlsList() {
+        urlViewModel.urls.observe(this, Observer {
+            Log.i("MYTAG", it.toString())
+            binding.urlsRecyclerView.adapter = MyRecyclerViewAdapter(it,
+                {selectedItem : Url->listItemClicked(selectedItem)})
+        })
+    }
+
+    private fun listItemClicked(url : Url) {
+       // Toast.makeText(this, "selected url is ${url.url}", Toast.LENGTH_LONG).show()
+        urlViewModel.initUpdateAndDelete(url)
+    }
 
 }
