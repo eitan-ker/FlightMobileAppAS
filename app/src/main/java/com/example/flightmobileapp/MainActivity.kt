@@ -29,7 +29,7 @@ class MainActivity : AppCompatActivity() {
                 .baseUrl(insertUrl.text.toString())
                 .addConverterFactory(GsonConverterFactory.create(gson)).build()
             val api = retrofit.create(Api::class.java)
-            val body = api.getImg().enqueue(object : Callback<ResponseBody> {
+            val body = api.getScreenshot().enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(
                     call: Call<ResponseBody>,
                     response: Response<ResponseBody>
