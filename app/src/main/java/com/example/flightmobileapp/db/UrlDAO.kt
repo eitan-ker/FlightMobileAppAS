@@ -18,6 +18,7 @@ interface UrlDAO {
     @Query("DELETE FROM URL_data_table")
     suspend fun deleteAll()
 
-    @Query("SELECT * FROM URL_data_table")
+    @Query("SELECT * FROM URL_data_table ORDER BY Url_Id DESC LIMIT 5")
     fun getAllUrls() : LiveData<List<Url>>
+
 }
