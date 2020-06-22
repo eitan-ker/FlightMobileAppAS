@@ -6,6 +6,7 @@ import android.os.Binder
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.OverScroller
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -45,7 +46,11 @@ class MainActivity : AppCompatActivity() {
         binding.lifecycleOwner = this
         initRecycleView()
 
-        print("finishd clickes")
+        urlViewModel.message.observe(this, Observer {
+            it.getContentIfNotHandled()?.let {
+                Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+            }
+        })
 
         urlViewModel.isConnected.observe(this, Observer {
             if(it) {
