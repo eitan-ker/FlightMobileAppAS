@@ -61,23 +61,47 @@ class UrlViewModel(private val repository: UrlRepo) : ViewModel(), Observable {
         if (inputUrl.value == null) {
             statusMessage.value = Event("Please enter Url")
         } else {
+
             if (isUpdateOrDelete) {
                 urlToUpdateOrDelete.url = inputUrl.value!!
 
                 if (urlToUpdateOrDelete.url != "") {
-
+                    // checkIfExist
                     insert(Url(id = 0, url = urlToUpdateOrDelete.url))
                     connect(urlToUpdateOrDelete.url)
                 }
             } else {
                 val url = inputUrl.value!!
                 if (url != "") {
+                    if (checkIfExist(url)) {
+                        returnUrl(url)?.let { delete(it) }
+                    }
+
                     insert(Url(id = 0, url = url))
                     connect(url)
                 }
             }
         }
         inputUrl.value = null
+    }
+
+    // moving here only after i'm sure there is a url
+    fun returnUrl(urlAddress : String) : Url? {
+        for (url in urls.value!!) {
+            if (urlAddress == url.url) {
+                return url
+            }
+        }
+        return null
+    }
+
+    fun checkIfExist(urlAddress : String) : Boolean {
+        for (url in urls.value!!) {
+            if (urlAddress == url.url) {
+                return true
+            }
+        }
+        return false
     }
 
     fun clearAllOrDelete() {
@@ -96,6 +120,13 @@ class UrlViewModel(private val repository: UrlRepo) : ViewModel(), Observable {
       isUpdateOrDelete = false
       clearAllOrDeleteButtonText.value = "Clear All"
 } */
+
+      fun delete(url: Url): Job = viewModelScope.launch {
+          repository.delete(url)
+       //   inputUrl.value = null
+       //   isUpdateOrDelete = false
+       //   clearAllOrDeleteButtonText.value = "Clear All"
+      }
 
     fun connect(url: String) {
         try {
@@ -134,14 +165,6 @@ class UrlViewModel(private val repository: UrlRepo) : ViewModel(), Observable {
         }
 
     }
-
-
-    /*  fun delete(url: Url): Job = viewModelScope.launch {
-          repository.delete(url)
-          inputUrl.value = null
-          isUpdateOrDelete = false
-          clearAllOrDeleteButtonText.value = "Clear All"
-      } */
 
     fun clearAll(): Job = viewModelScope.launch {
         repository.deleteAll()
