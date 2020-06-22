@@ -52,6 +52,7 @@ class MainActivity : AppCompatActivity() {
                 val url_screenShot = urlViewModel.url_for_screenshot
                 val intent = Intent(this@MainActivity, AppActivity::class.java)
                 intent.putExtra("url_screenshot", url_screenShot)
+                intent.putExtra("is_connected", it)
                 startActivity(intent)
             }
         })

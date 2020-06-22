@@ -104,7 +104,11 @@ class UrlViewModel(private val repository: UrlRepo) : ViewModel(), Observable {
             val retrofit = Retrofit.Builder()
                 .baseUrl(url)
                 .addConverterFactory(GsonConverterFactory.create(gson)).build()
+            println()
+            println(url)
+            println("--------------------------------------------")
             val api = retrofit.create(Api::class.java)
+            //println(api)
             val body = api.getScreenshot().enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(
                     call: Call<ResponseBody>,
@@ -119,11 +123,10 @@ class UrlViewModel(private val repository: UrlRepo) : ViewModel(), Observable {
 
                     }
                 }
-
                 override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-
                     //    failure
-
+                    var x = 5
+                    x = 3
                 }
             })
             inputUrl.value = null
