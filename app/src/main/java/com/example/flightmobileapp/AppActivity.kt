@@ -44,6 +44,7 @@ class AppActivity : AppCompatActivity() {
     }
 
     private fun initSeekBars() {
+        seekBar = findViewById(R.id.seekBar)
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, b: Boolean) {
                 rudder = normalize(progress, SMALL_LIM, BIG_LIM, MIN_VALUE, MAX_VALUE)
@@ -51,6 +52,7 @@ class AppActivity : AppCompatActivity() {
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
         })
+        verticalSeekBar = findViewById(R.id.mySeekBar)
         verticalSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, b: Boolean) {
                 throttle = normalize(progress, THROTTLE_SMALL_LIM, BIG_LIM, MIN_VALUE, MAX_VALUE)
