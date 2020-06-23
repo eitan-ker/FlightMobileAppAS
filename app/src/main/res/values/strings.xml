@@ -2,4 +2,8 @@
     <string name="app_name">FlightMobileApp</string>
 
     <string name="TypeURL">Type URL..</string>
+    <string name="rudder"><![CDATA[<--Rudder-->]]></string>
+    <string name="aileron"><![CDATA[<--Aileron-->]]></string>
+    <string name="elevator"><![CDATA[<--Elevator-->]]></string>
+    <string name="throttle"><![CDATA[<--Throttle-->]]></string>
 </resources>
