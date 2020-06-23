@@ -4,6 +4,6 @@ import retrofit2.http.GET
 import retrofit2.http.Url
 
 interface Api {
-    @GET("/")
+    @GET("/screenshot")
     fun getScreenshot(): Call<ResponseBody>
 }
