@@ -55,19 +55,6 @@ class UrlViewModel(private val repository: UrlRepo) : ViewModel(), Observable {
 
     fun saveOrUpdate() {
 
-
-        println("11111111111111")
-        for (url in urls.value!!) {
-            print(url.url)
-            print(", ")
-            println()
-        }
-        println("11111111111111")
-        print(">>  ")
-        print(inputUrl.value)
-        println("  <<")
-
-
         if (inputUrl.value == null) {
             statusMessage.value = Event("Please enter Url")
         } else {
@@ -132,6 +119,7 @@ class UrlViewModel(private val repository: UrlRepo) : ViewModel(), Observable {
                     call: Call<ResponseBody>,
                     response: Response<ResponseBody>
                 ) {
+
                     //    success
                     if (response.isSuccessful) {
 
@@ -146,7 +134,6 @@ class UrlViewModel(private val repository: UrlRepo) : ViewModel(), Observable {
 
                     //    failure
                     statusMessage.value = Event("Could not Connect to Server")
-
                 }
             })
             inputUrl.value = null

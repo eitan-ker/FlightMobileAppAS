@@ -61,35 +61,6 @@ class MainActivity : AppCompatActivity() {
                 startActivity(intent)
             }
         })
-
-
-        /*connectButton.setOnClickListener {
-
-            val gson = GsonBuilder()
-                .setLenient().create()
-            val retrofit = Retrofit.Builder()
-                .baseUrl(insertUrl.text.toString())
-                .addConverterFactory(GsonConverterFactory.create(gson)).build()
-            val api = retrofit.create(Api::class.java)
-            val body = api.getScreenshot().enqueue(object : Callback<ResponseBody> {
-                override fun onResponse(
-                    call: Call<ResponseBody>,
-                    response: Response<ResponseBody>
-                ) {
-                    //    success
-                    if (response.isSuccessful) {
-
-
-
-                        val intent = Intent(this@MainActivity, AppActivity::class.java)
-                        startActivity(intent)
-                    }
-                    }
-                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                    //    failure
-                }
-            })
-        }*/
     }
 
     private fun initRecycleView() {
@@ -97,8 +68,6 @@ class MainActivity : AppCompatActivity() {
         adapter = MyRecyclerViewAdapter({selectedItem : Url->listItemClicked(selectedItem)})
         binding.urlsRecyclerView.adapter = adapter
         displayUrlsList()
-
-
     }
 
     private fun displayUrlsList() {
