@@ -10,13 +10,14 @@ import android.widget.Toast
 import com.google.gson.GsonBuilder
 import com.h6ah4i.android.widget.verticalseekbar.VerticalSeekBar
 import io.github.controlwear.virtual.joystick.android.JoystickView
-import kotlinx.android.synthetic.main.screenshot.*
+import kotlinx.android.synthetic.main.activity_app.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.Url
 
 class AppActivity : AppCompatActivity() {
     private lateinit var joystickView: JoystickView
@@ -31,6 +32,8 @@ class AppActivity : AppCompatActivity() {
     private val SMALL_LIM: Int = -1
     private val BIG_LIM: Int = 1
     private val THROTTLE_SMALL_LIM: Int = 0
+    private var url : String = ""
+    private var isConnected : Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +43,9 @@ class AppActivity : AppCompatActivity() {
                 angle: Int, strength: Int ->
             onMoveEvent(angle, strength)
         }
+        url = getIntent().getExtras()?.get("url_screenshot").toString()
+        //isConnected = getIntent().getExtras()?.get("isConnected") as Boolean
+        getScreenshot(url, isConnected);
         initSeekBars()
     }
 
@@ -76,7 +82,7 @@ class AppActivity : AppCompatActivity() {
         return (bigLim - smallLim) * ((value.toFloat() - min) / (max - min)) + smallLim
     }
 
-    fun getScreenshot(url : String){
+    fun getScreenshot(url : String, isConnected : Boolean){
         Thread {
             while(true) {
                 val gson = GsonBuilder()
@@ -93,17 +99,19 @@ class AppActivity : AppCompatActivity() {
                         response: Response<ResponseBody>
                     ) {
                         val scFromBody = response.body()?.byteStream()
-                        val BitmapSc = BitmapFactory.decodeStream(scFromBody)
+                        val bitmapSc = BitmapFactory.decodeStream(scFromBody)
                         runOnUiThread {
-                            screenshot.setImageBitmap(BitmapSc)
+                            screenshot.setImageBitmap(bitmapSc)
                         }
                     }
                     override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-
+                        //On Failure
+                        Toast.makeText(applicationContext, "Could not retrieve image from server", Toast.LENGTH_LONG).show()
                     }
                 })
-                Thread.sleep(300)
+                Thread.sleep(500)
             }
         }.start()
+       //  Toast.makeText(applicationContext, "Exiting getScreenshot method", Toast.LENGTH_LONG).show()
     }
 }
