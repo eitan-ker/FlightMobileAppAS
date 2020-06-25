@@ -46,7 +46,8 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
         app:layout_constraintBottom_toTopOf="@+id/joystick"
-        app:layout_constraintStart_toStartOf="parent"></SeekBar>
+        app:layout_constraintStart_toStartOf="parent"
+        android:progress="50"/>
 
     <TextView
         android:id="@+id/textView"
