@@ -122,7 +122,7 @@ class UrlViewModel(private val repository: UrlRepo) : ViewModel(), Observable {
 
                     //    success
                     if (response.isSuccessful) {
-
+                        statusMessage.value = Event("Connected")
                         // isConnected = true
                         url_for_screenshot = url
                         isConnected.value = true
@@ -140,7 +140,7 @@ class UrlViewModel(private val repository: UrlRepo) : ViewModel(), Observable {
         } catch (e: Exception) {
 
             // could not connect to URL output to screen
-            statusMessage.value = Event("Could not Connect to Server")
+            statusMessage.value = Event("Could not Connect to Server -Exception")
         }
 
     }

@@ -6,4 +6,5 @@
     <string name="aileron"><![CDATA[<--Aileron-->]]></string>
     <string name="elevator"><![CDATA[<--Elevator-->]]></string>
     <string name="throttle"><![CDATA[<--Throttle-->]]></string>
+    <string name ="displayed_screenshots">Displayed screenshot</string>
 </resources>

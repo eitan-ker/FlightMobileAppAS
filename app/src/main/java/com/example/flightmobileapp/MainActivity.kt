@@ -44,6 +44,7 @@ class MainActivity : AppCompatActivity() {
                 val intent = Intent(this@MainActivity, AppActivity::class.java)
                 intent.putExtra("url_screenshot", url_screenShot)
                 intent.putExtra("is_connected", it)
+                Toast.makeText(applicationContext, "Init AppActivity", Toast.LENGTH_SHORT).show()
                 startActivity(intent)
             }
         })

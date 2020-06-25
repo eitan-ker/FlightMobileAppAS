@@ -25,7 +25,10 @@ class AppActivity : AppCompatActivity() {
     private lateinit var joystickView: JoystickView
     private lateinit var seekBar: SeekBar
     private lateinit var verticalSeekBar: VerticalSeekBar
-    private lateinit var command: ConcurrentHashMap<String, Float>
+    private var aileron = 0.0f
+    private var elevator = 0.0f
+    private var rudder = 0.0f
+    private var throttle = 0.0f
     private val MIN_VALUE: Int = 0
     private val MAX_VALUE: Int = 100
     private val SMALL_LIM: Int = -1
@@ -39,16 +42,9 @@ class AppActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_app)
-        joystickView = findViewById(R.id.joystick)
-        joystickView.setOnMoveListener {
-                angle: Int, strength: Int ->
-            onMoveEvent(angle, strength)
-        }
+        // Get the requested url from MainActivity
         url = getIntent().getExtras()?.get("url_screenshot").toString()
-        //isConnected = getIntent().getExtras()?.get("isConnected") as Boolean
-        getScreenshot(url, isConnected);
         initServerConnection()
-        initMap()
         initJoystick()
         initSeekBars()
     }
@@ -68,18 +64,12 @@ class AppActivity : AppCompatActivity() {
         }
     }
 
-    private fun initMap() {
-        command["aileron"] = 0.0f
-        command["elevator"] = 0.0f
-        command["rudder"] = 0.0f
-        command["throttle"] = 0.0f
-    }
-
     private fun initSeekBars() {
         seekBar = findViewById(R.id.seekBar)
         seekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, b: Boolean) {
-                command["rudder"] = normalize(progress, SMALL_LIM, BIG_LIM, MIN_VALUE, MAX_VALUE)
+                rudder = normalize(progress, SMALL_LIM, BIG_LIM, MIN_VALUE, MAX_VALUE)
+                sendCommand()
             }
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
@@ -87,7 +77,8 @@ class AppActivity : AppCompatActivity() {
         verticalSeekBar = findViewById(R.id.mySeekBar)
         verticalSeekBar.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar, progress: Int, b: Boolean) {
-                command["throttle"] = normalize(progress, THROTTLE_SMALL_LIM, BIG_LIM, MIN_VALUE, MAX_VALUE)
+                throttle = normalize(progress, THROTTLE_SMALL_LIM, BIG_LIM, MIN_VALUE, MAX_VALUE)
+                sendCommand()
             }
             override fun onStartTrackingTouch(seekBar: SeekBar) {}
             override fun onStopTrackingTouch(seekBar: SeekBar) {}
@@ -95,16 +86,15 @@ class AppActivity : AppCompatActivity() {
     }
 
     fun onMoveEvent(angle: Int, strength: Int) {
-        command["elevator"] = normalize(joystickView.normalizedY, SMALL_LIM,
+        elevator = normalize(joystickView.normalizedY, SMALL_LIM,
             BIG_LIM, MIN_VALUE, MAX_VALUE)
-        command["aileron"] = normalize(joystickView.normalizedX, SMALL_LIM,
+        aileron = normalize(joystickView.normalizedX, SMALL_LIM,
             BIG_LIM, MIN_VALUE, MAX_VALUE)
         sendCommand()
     }
 
     fun sendCommand() {
-        val postCmd = Command(command["aileron"], command["elevator"],
-            command["rudder"], command["throttle"])
+        val postCmd = Command(aileron, elevator, rudder, throttle)
         val retrofit = buildService(Api::class.java)
         retrofit.postCommand(postCmd).enqueue(
             object: Callback<Command> {
@@ -127,10 +117,43 @@ class AppActivity : AppCompatActivity() {
     fun normalize(value: Int, smallLim: Int, bigLim: Int, min: Int, max: Int): Float {
         return (bigLim - smallLim) * ((value.toFloat() - min) / (max - min)) + smallLim
     }
-
-    fun getScreenshot(url : String, isConnected : Boolean){
+    /*
+    This method sets the boolean for the screenshot loop (getScreenshot())
+    and calls the getScreenshot() method on Start
+     */
+    override fun onStart() {
+        super.onStart()
+        this.isConnected = true;
+        getScreenshot(url);
+    }
+    /*
+    This method sets the boolean for the screenshot loop (getScreenshot()) on Destroy
+     */
+    override fun onDestroy() {
+        this.isConnected = false;
+        super.onDestroy()
+    }
+    /*
+    This method sets the boolean for the screenshot loop (getScreenshot()) on Resume
+     */
+    override fun onResume() {
+        super.onResume()
+        this.isConnected = true;
+    }
+    /*
+    This method sets the boolean for the screenshot loop (getScreenshot()) on Pause
+     */
+    override fun onPause() {
+        this.isConnected = false;
+        super.onPause()
+    }
+    /*
+    This method sends requests to a middle server in order to receive a screenshot
+    from the FlightGear simulator and presents the given screenshot to the user
+     */
+    fun getScreenshot(url : String){
         Thread {
-            while(true) {
+            while(isConnected) {
                 val gson = GsonBuilder()
                     .setLenient()
                     .create()
@@ -158,6 +181,5 @@ class AppActivity : AppCompatActivity() {
                 Thread.sleep(500)
             }
         }.start()
-       //  Toast.makeText(applicationContext, "Exiting getScreenshot method", Toast.LENGTH_LONG).show()
     }
 }
