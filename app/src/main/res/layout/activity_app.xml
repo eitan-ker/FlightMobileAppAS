@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@drawable/backgroud"
+    android:id="@+id/gridView"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/backgroud"
     tools:context=".AppActivity">
 
     <SeekBar
@@ -14,24 +14,18 @@
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="28dp"
-        android:layout_marginBottom="320dp"
+        android:layout_marginBottom="300dp"
         android:progress="50"
         app:layout_constraintBottom_toBottomOf="@+id/joystick"
         app:layout_constraintStart_toStartOf="parent" />
-
+<
     <ImageView
         android:id="@+id/screenshot"
-        android:layout_width="404dp"
-        android:layout_height="335dp"
-        android:layout_marginTop="4dp"
-        android:clickable="false"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true"
         android:contentDescription="@string/displayed_screenshots"
-        android:cropToPadding="false"
-        android:keepScreenOn="true"
-        android:visibility="visible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:visibility="visible" />
+        android:scaleType="fitCenter" />
 
     <io.github.controlwear.virtual.joystick.android.JoystickView
         android:id="@+id/joystick"
@@ -48,8 +42,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/rudder"
-        android:textStyle="italic"
         android:textColor="#C0FFFF"
+        android:textStyle="italic"
         app:layout_constraintBottom_toTopOf="@+id/seekBar"
         app:layout_constraintEnd_toEndOf="@+id/seekBar"
         app:layout_constraintStart_toStartOf="@+id/seekBar" />
@@ -91,8 +85,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/aileron"
-        android:textStyle="italic"
         android:textColor="#C0FFFF"
+        android:textStyle="italic"
         app:layout_constraintBottom_toTopOf="@+id/joystick"
         app:layout_constraintEnd_toEndOf="@+id/joystick"
         app:layout_constraintStart_toStartOf="@+id/joystick" />
@@ -104,8 +98,8 @@
         android:layout_marginEnd="8dp"
         android:rotation="90"
         android:text="@string/elevator"
-        android:textStyle="italic"
         android:textColor="#C0FFFF"
+        android:textStyle="italic"
         app:layout_constraintBottom_toBottomOf="@id/joystick"
         app:layout_constraintEnd_toEndOf="@+id/verticalSeekBarWrapper"
         app:layout_constraintTop_toBottomOf="@+id/seekBar"
